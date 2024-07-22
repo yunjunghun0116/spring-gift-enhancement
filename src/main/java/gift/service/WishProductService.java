@@ -101,7 +101,7 @@ public class WishProductService {
     }
 
     private WishProduct findWishProductById(Long id) {
-        return wishProductRepository.findById(id).orElseThrow(
-                () -> new NotFoundElementException(id + "를 가진 위시 리스트가 존재하지 않습니다."));
+        return wishProductRepository.findById(id)
+                .orElseThrow(() -> new NotFoundElementException(id + "를 가진 위시 리스트가 존재하지 않습니다."));
     }
 }

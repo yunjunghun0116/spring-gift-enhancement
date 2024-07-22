@@ -1,12 +1,12 @@
 package gift.controller.auth;
 
+import gift.config.properties.JwtProperties;
 import gift.exception.UnauthorizedAccessException;
 import gift.model.MemberRole;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -15,10 +15,10 @@ import javax.crypto.SecretKey;
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
-    @Value("${SECRET_KEY}")
-    private String secretKey;
+    private final JwtProperties jwtProperties;
 
-    public AuthInterceptor() {
+    public AuthInterceptor(JwtProperties jwtProperties) {
+        this.jwtProperties = jwtProperties;
     }
 
     @Override
@@ -73,6 +73,6 @@ public class AuthInterceptor implements HandlerInterceptor {
     }
 
     private SecretKey getSecretKey() {
-        return Keys.hmacShaKeyFor(secretKey.getBytes());
+        return Keys.hmacShaKeyFor(jwtProperties.secretKey().getBytes());
     }
 }

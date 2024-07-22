@@ -1,5 +1,6 @@
 package gift.service.auth;
 
+import gift.config.properties.JwtProperties;
 import gift.dto.AuthResponse;
 import gift.dto.LoginRequest;
 import gift.dto.RegisterRequest;
@@ -10,7 +11,6 @@ import gift.model.MemberRole;
 import gift.repository.MemberRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,13 +21,11 @@ import java.util.Date;
 public class AuthService {
 
     private final MemberRepository memberRepository;
-    @Value("${SECRET_KEY}")
-    private String secretKey;
-    @Value("${EXPIRED_TIME}")
-    private long expiredTime;
+    private final JwtProperties jwtProperties;
 
-    public AuthService(MemberRepository memberRepository) {
+    public AuthService(MemberRepository memberRepository, JwtProperties jwtProperties) {
         this.memberRepository = memberRepository;
+        this.jwtProperties = jwtProperties;
     }
 
     public AuthResponse register(RegisterRequest registerRequest) {
@@ -52,8 +50,8 @@ public class AuthService {
                 .claim("name", member.getName())
                 .claim("role", member.getRole())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiredTime))
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                .expiration(new Date(System.currentTimeMillis() + jwtProperties.expiredTime()))
+                .signWith(Keys.hmacShaKeyFor(jwtProperties.secretKey().getBytes()))
                 .compact();
     }
 
