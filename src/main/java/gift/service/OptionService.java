@@ -50,8 +50,11 @@ public class OptionService {
                 .toList();
     }
 
-    public void deleteOption(Long id) {
-        optionRepository.deleteById(id);
+    public void deleteOption(Long optionId) {
+        if (!optionRepository.existsById(optionId)) {
+            throw new NotFoundElementException("존재하지 않는 상품 옵션의 ID 입니다.");
+        }
+        optionRepository.deleteById(optionId);
     }
 
     public void deleteAllByProductId(Long productId) {

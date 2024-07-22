@@ -1,5 +1,6 @@
 package gift.service;
 
+import gift.exception.NotFoundElementException;
 import gift.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,9 @@ public class MemberService {
     }
 
     public void deleteMember(Long memberId) {
+        if (!memberRepository.existsById(memberId)) {
+            throw new NotFoundElementException("존재하지 않는 이용자의 ID 입니다.");
+        }
         wishProductService.deleteAllByMemberId(memberId);
         memberRepository.deleteById(memberId);
     }

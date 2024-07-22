@@ -60,6 +60,9 @@ public class ProductService {
     }
 
     public void deleteProduct(Long productId) {
+        if (!productRepository.existsById(productId)) {
+            throw new NotFoundElementException("존재하지 않는 상품의 ID 입니다.");
+        }
         optionService.deleteAllByProductId(productId);
         wishProductService.deleteAllByProductId(productId);
         productRepository.deleteById(productId);

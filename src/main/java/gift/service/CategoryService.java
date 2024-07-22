@@ -51,9 +51,12 @@ public class CategoryService {
                 .toList();
     }
 
-    public void deleteCategory(Long id) {
-        productService.deleteAllProductWithCategoryId(id);
-        categoryRepository.deleteById(id);
+    public void deleteCategory(Long categoryId) {
+        if (!categoryRepository.existsById(categoryId)) {
+            throw new NotFoundElementException("존재하지 않는 상품 카테고리의 ID 입니다.");
+        }
+        productService.deleteAllProductWithCategoryId(categoryId);
+        categoryRepository.deleteById(categoryId);
     }
 
     private Category saveCategoryWithCategoryRequest(CategoryRequest categoryRequest) {

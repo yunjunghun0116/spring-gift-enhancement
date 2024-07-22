@@ -61,6 +61,9 @@ public class WishProductService {
     }
 
     public void deleteWishProduct(Long wishProductId) {
+        if (!wishProductRepository.existsById(wishProductId)) {
+            throw new NotFoundElementException("존재하지 않는 위시 리스트의 ID 입니다.");
+        }
         wishProductRepository.deleteById(wishProductId);
     }
 
