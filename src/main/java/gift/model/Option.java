@@ -1,5 +1,6 @@
 package gift.model;
 
+import gift.exception.BadRequestException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -43,12 +44,15 @@ public class Option extends BaseEntity {
         return quantity;
     }
 
-    public void updateOptionInfo(String name, Integer quantity) {
-        this.name = name;
-        this.quantity = quantity;
+    public void updateOptionInfo(String newName, Integer newQuantity) {
+        this.name = newName;
+        this.quantity = newQuantity;
     }
 
     public void subtract(Integer subQuantity) {
+        if (subQuantity > quantity) {
+            throw new BadRequestException("주문량이 옵션의 잔여 갯수를 초과합니다");
+        }
         this.quantity = quantity - subQuantity;
     }
 }

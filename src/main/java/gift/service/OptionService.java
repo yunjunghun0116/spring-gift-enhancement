@@ -4,7 +4,6 @@ import gift.dto.OptionAddRequest;
 import gift.dto.OptionResponse;
 import gift.dto.OptionSubtractRequest;
 import gift.dto.OptionUpdateRequest;
-import gift.exception.BadRequestException;
 import gift.exception.DuplicatedNameException;
 import gift.exception.NotFoundElementException;
 import gift.model.Option;
@@ -69,7 +68,6 @@ public class OptionService {
     public void subtractOptionQuantity(Long id, OptionSubtractRequest optionSubtractRequest) {
         var option = optionRepository.findByIdWithLock(id)
                 .orElseThrow(() -> new NotFoundElementException(id + "를 가진 상품 옵션이 존재하지 않습니다."));
-        subtractValidation(option, optionSubtractRequest.quantity());
         option.subtract(optionSubtractRequest.quantity());
         optionRepository.save(option);
     }
@@ -97,12 +95,6 @@ public class OptionService {
     private void optionNameValidation(Long productId, String name) {
         if (optionRepository.existsOptionByProductIdAndName(productId, name)) {
             throw new DuplicatedNameException("이미 존재하는 상품의 상품 옵션입니다.");
-        }
-    }
-
-    private void subtractValidation(Option option, Integer count) {
-        if (count > option.getQuantity()) {
-            throw new BadRequestException("주문량이 옵션의 잔여 갯수를 초과합니다");
         }
     }
 }
