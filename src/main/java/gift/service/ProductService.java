@@ -59,14 +59,6 @@ public class ProductService {
                 .toList();
     }
 
-    @Transactional(readOnly = true)
-    public List<ProductResponse> getProductsWithCategoryId(Long categoryId) {
-        return productRepository.findAllByCategoryId(categoryId)
-                .stream()
-                .map(this::getProductResponseFromProduct)
-                .toList();
-    }
-
     public void deleteProduct(Long productId) {
         optionService.deleteAllByProductId(productId);
         wishProductService.deleteAllByProductId(productId);
