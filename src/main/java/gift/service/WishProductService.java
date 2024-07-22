@@ -64,6 +64,14 @@ public class WishProductService {
         wishProductRepository.deleteById(wishProductId);
     }
 
+    public void deleteAllByProductId(Long productId) {
+        wishProductRepository.deleteAllByProductId(productId);
+    }
+
+    public void deleteAllByMemberId(Long memberId) {
+        wishProductRepository.deleteAllByMemberId(memberId);
+    }
+
     private WishProduct saveWishProductWithWishProductRequest(Product product, Member member, Integer count) {
         var wishProduct = new WishProduct(product, member, count);
         return wishProductRepository.save(wishProduct);

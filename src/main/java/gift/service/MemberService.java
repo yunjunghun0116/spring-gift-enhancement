@@ -1,7 +1,6 @@
 package gift.service;
 
 import gift.repository.MemberRepository;
-import gift.repository.WishProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,15 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final WishProductRepository wishProductRepository;
+    private final WishProductService wishProductService;
 
-    public MemberService(MemberRepository memberRepository, WishProductRepository wishProductRepository) {
+    public MemberService(MemberRepository memberRepository, WishProductService wishProductService) {
         this.memberRepository = memberRepository;
-        this.wishProductRepository = wishProductRepository;
+        this.wishProductService = wishProductService;
     }
 
     public void deleteMember(Long memberId) {
-        wishProductRepository.deleteAllByMemberId(memberId);
+        wishProductService.deleteAllByMemberId(memberId);
         memberRepository.deleteById(memberId);
     }
 }

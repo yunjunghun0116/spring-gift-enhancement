@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
@@ -108,8 +107,8 @@ class OptionServiceTest {
         //given
         var subtractOptionRequest = new OptionSubtractRequest(1);
         int requestCount = 10000;
-        ExecutorService executorService = Executors.newFixedThreadPool(500);
-        CountDownLatch countDownLatch = new CountDownLatch(requestCount);
+        var executorService = Executors.newFixedThreadPool(500);
+        var countDownLatch = new CountDownLatch(requestCount);
         //when
         for (int i = 0; i < requestCount; i++) {
             executorService.execute(() -> {
@@ -124,7 +123,8 @@ class OptionServiceTest {
         //then
         var option = optionService.getOptions(3L, Pageable.unpaged()).stream()
                 .filter((op) -> op.id().equals(1L))
-                .findFirst().get();
+                .findFirst()
+                .get();
 
         Assertions.assertThat(option.quantity()).isEqualTo(0);
     }

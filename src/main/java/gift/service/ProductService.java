@@ -11,7 +11,6 @@ import gift.model.Product;
 import gift.repository.CategoryRepository;
 import gift.repository.OptionRepository;
 import gift.repository.ProductRepository;
-import gift.repository.WishProductRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,15 +23,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final WishProductRepository wishProductRepository;
-    private final OptionRepository optionRepository;
+    private final WishProductService wishProductService;
     private final OptionService optionService;
 
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, WishProductRepository wishProductRepository, OptionRepository optionRepository, OptionService optionService) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, WishProductService wishProductService, OptionRepository optionRepository, OptionService optionService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
-        this.wishProductRepository = wishProductRepository;
-        this.optionRepository = optionRepository;
+        this.wishProductService = wishProductService;
         this.optionService = optionService;
     }
 
@@ -71,8 +68,8 @@ public class ProductService {
     }
 
     public void deleteProduct(Long productId) {
-        optionRepository.deleteAllByProductId(productId);
-        wishProductRepository.deleteAllByProductId(productId);
+        optionService.deleteAllByProductId(productId);
+        wishProductService.deleteAllByProductId(productId);
         productRepository.deleteById(productId);
     }
 

@@ -54,6 +54,10 @@ public class OptionService {
         optionRepository.deleteById(id);
     }
 
+    public void deleteAllByProductId(Long productId) {
+        optionRepository.deleteAllByProductId(productId);
+    }
+
     public void makeDefaultOption(Product product) {
         var option = new Option(product, "기본", 1000);
         optionRepository.save(option);
